@@ -14,7 +14,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: "https://chatgpt-clone-frontend-three.vercel.app",
     credentials: true,
   })
 );
@@ -43,6 +43,14 @@ app.get("/api/upload", (req, res) => {
 
 app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
   const userId = req.auth.userId;
+  
+  // Set the cookie after user authentication
+  res.cookie('cookie_name', 'cookie_value', {
+    httpOnly: true,
+    secure: true,  // Ensures the cookie is sent over HTTPS
+    sameSite: 'None',  // Required for cross-site cookies
+  });
+
   const { text } = req.body;
   try {
     // CREATE A NEW CHAT
